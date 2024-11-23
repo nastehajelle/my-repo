@@ -1,0 +1,216 @@
+<%- include('Dashboard') %>
+    <link rel="stylesheet" href="/vendors/datatables.net-bs5/dataTables.bootstrap5.css">
+
+    <div class="page-content">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+           + Add Case
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Case Registeration</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/AddCases" method="post">
+                            <div class="mb-3">
+                                <label for="exampleInputEmail1" class="form-label" >plaintiff Name</label>
+                                <input required type="text" class="form-control" id="exampleInputEmail1"
+                                    aria-describedby="emailHelp" name="Plaintiff">
+                                <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> -->
+                            </div>
+                            <div class="mb-3">
+                                <label for="exampleInputEmail1" class="form-label">plaintiff National ID</label>
+                                <input required type="text" class="form-control" id="exampleInputEmail1"
+                                    aria-describedby="emailHelp" name="PlaintiffNationalId">
+                                <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> -->
+                            </div>
+                            <div class="mb-3">
+                                <label for="exampleInputEmail1" class="form-label">Defendant Name</label>
+                                <input required type="text" class="form-control" id="exampleInputEmail1"
+                                    aria-describedby="emailHelp" name="Defendant">
+                                <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> -->
+                            </div>
+                            <div class="mb-3">
+                                <label for="exampleInputEmail1" class="form-label">Defendant National ID</label>
+                                <input required type="text" class="form-control" id="exampleInputEmail1"
+                                    aria-describedby="emailHelp" name="DefendantNationalId">
+                                <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> -->
+                            </div>
+                            <div class="input-group flex-nowrap my-2">
+                                <span class="input-group-text" id="addon-wrapping">Case Type</span>
+            
+                                <select name="CaseTypeId" class="form-control">
+                                    <option disabled>Select Case Type</option>
+            
+                                    <% caseTypes.forEach(caseType => { %>
+                                        <option value="<%= caseType._id %>"><%= caseType.casseType %></option>
+                                    <% }) %>
+            
+                                </select>
+                            </div>
+                            <div class="input-group flex-nowrap  mt-3 ">
+                                <span class="input-group-text" id="addon-wrapping">Station</span>
+            
+                                <select name="StationId" class="form-control">
+                                    <option disabled>Select Station</option>
+                                    <% stations.forEach(station => { %>
+                                        <option value="<%= station._id %>"><%= station.StationName %></option>
+                                    <% }) %>
+                                    
+
+            
+                                </select>
+                            </div>  
+                            <div class="input-group flex-nowrap  mt-3 ">
+                                <span class="input-group-text" id="addon-wrapping">Investigator</span>
+            
+                                <select name="InvestigatorId" class="form-control">
+                                    <option disabled>Select Station</option>
+                                    <% investigator.forEach(station => { %>
+                                        <option value="<%= station._id %>"><%= station.FullName %></option>
+                                    <% }) %>
+                                    
+
+            
+                                </select>
+                            </div>  
+                            <!-- <label for="tArea" class="form-label">Issue</label> -->
+                    <div class="mb-3">
+                        <label for="tArea" class="form-label"></label>
+                        <textarea name="Issue" id="tArea" style="width: 100%; padding: 10PX 15PX; " placeholder="Enter Issue" rows="6"></textarea>
+                    </div>
+                  
+                    
+                    <div style="text-align: end;">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row px-1 mt-4">
+        <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">CASES LIST</h6>
+
+                    <div class="table-responsive">
+                        <table id="dataTableExample" class="table">
+                            <thead>
+                                <tr>
+                                    <th>Case id</th>
+                                    <th>Plaintiff</th>
+                                    <th>Plaintiff National ID</th>
+                                    <th>Defendant</th>
+                                    <th>Defendant National ID</th>
+                                    <th>Issue</th>
+                                    <th>Case type </th>
+                                    <th>Station</th>
+                                    <th>Investigator</th>
+                                    <td>Status</td>
+                                    <td>Action</td>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% cases.forEach(c => { %>
+                                    <tr>                
+                                      <td><%= c.Case_id %></td>
+                                      <td><%= c.Plaintiff %></td>
+                                      <td><%= c.PlaintiffNationalId %></td>
+                                      <td><%= c.Defendant %></td>
+                                      <td><%= c.DefendantNationalId %></td>
+                                      <td><%= c.Issue %></td>
+                                      <td><%= c.CaseTypeId.casseType %></td>
+                                      <td><%= c.StationId.StationName %></td>
+                                      <td><%= c.investigatorId.FullName %></td>
+                                      <td><%= c.Status %></td>
+                                     
+                                      <td>
+                                        <button type="button" onclick="edit(`<%= c._id %>`, `<%= c.FullName %>`, `<%= c.Sex %>`, `<%= c.Phone %>`)" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal" style="border: none;border-radius: 4px; font-size: 15px;padding: 4px 8px;"><i class="fa-regular fa-pen-to-square"></i></button>&nbsp;
+                                        
+                                      </td>
+                      
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Button trigger modal -->
+    <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Launch demo modal
+</button> -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/officer">
+                        <div class="mb-3">
+                            <label for="exampleInputEmail1" class="form-label">Full Name</label>
+                            <input required type="text" class="form-control" id="exampleInputEmail1"
+                                aria-describedby="emailHelp">
+                            <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> -->
+                        </div>
+                        <label class="form-label" font-weight: bold; ">Sex</label>
+          <div style=" border: 1px solid rgb(224, 224, 224);padding: 6px 9px; border-radius: 8px;">
+
+                            <div class="form-check form-check-inline mx-5 ">
+                                <input required class="form-check-input" type="radio" id="inlineCheckbox1" value="Male"
+                                    name="Sex">
+                                <label class="form-check-label" for="inlineCheckbox1">Male</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input required class="form-check-input" type="radio" id="inlineCheckbox2" value="Female"
+                                    name="Sex">
+                                <label class="form-check-label" for="inlineCheckbox2">Female</label>
+                            </div>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Phone</label>
+                    <input required type="text" class="form-control" id="exampleInputPassword1">
+                </div>
+
+                
+
+              
+                <div style="text-align: end;">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+                </form>
+                </div>
+               
+            </div>
+        </div>
+    </div>
+    <%- include('footer') %>
+        <!-- Plugin js for this page -->
+        <script src="/vendors/datatables.net/jquery.dataTables.js"></script>
+        <script src="/vendors/datatables.net-bs5/dataTables.bootstrap5.js"></script>
+        <!-- End plugin js for this page -->
+        <script src="/js/data-table.js"></script>
+    </div>
+
+
+
+
+
